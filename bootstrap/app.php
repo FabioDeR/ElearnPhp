@@ -1,5 +1,6 @@
 <?php
 
+use App\API\Middlewares\ExceptionHandlerMiddleware;
 use App\API\Middlewares\FromBodyBindingMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -12,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
         )
         ->withMiddleware(function (Middleware $middleware) {
         FromBodyBindingMiddleware::class;
-        //
+        ExceptionHandlerMiddleware::class;        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

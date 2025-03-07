@@ -1,16 +1,23 @@
 <?php
 namespace App\Core\Features\Organizations\Commands\CreateOrganization;
 
+use App\Core\Exceptions\ValidatorInterface;
 use Illuminate\Support\Facades\Validator;
 
-class CreateOrganizationValidator
+class CreateOrganizationValidator implements ValidatorInterface
 {
-    public static function validate(array $data)
+    public function validate(array $data): array
     {
         return Validator::make($data, [
-            'nom' => 'required|string|max:255',
-            'contact' => 'nullable|string|max:255',
-            'adresse_complete' => 'nullable|string|max:255'
-        ]);
+           'nom' => 'required|string|max:255',
+            'contact' => 'required|string|max:50',
+            'adresse_complete' => 'required|string',
+        ])->validate();
+
+        if ($validator->fails()) {
+            throw new \InvalidArgumentException(json_encode($validator->errors()->all()));
+        }
+
+        return $data;
     }
 }

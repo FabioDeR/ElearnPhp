@@ -18,13 +18,15 @@ class CreateOrganizationHandler implements CommandHandlerInterface
 
     public function handle(CommandInterface $command)
     {
-        $Organizatione = new Organization([
-            'id' => Str::uuid(),
+         // Validation des données AVANT d'exécuter la commande
+        $validatedData = (new CreateOrganizationValidator())->validate([
             'nom' => $command->nom,
             'contact' => $command->contact,
-            'adresse_complete' => $command->adresse_complete
+            'adresse_complete' => $command->adresse_complete,
         ]);
 
-        return $this->OrganizationRepository->add($Organizatione);
+        $Organizatione = $this->OrganizationRepository->add($validatedData);        
+
+        return $Organizatione;
     }
 }
