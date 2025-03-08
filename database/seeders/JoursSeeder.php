@@ -13,9 +13,9 @@ class JoursSeeder extends Seeder
         $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
 
         foreach ($jours as $jour) {
-            DB::table('jours')->insert([
+            DB::table('days')->insert([
                 'id' => Str::uuid(),
-                'nom' => $jour,
+                'name' => $jour,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

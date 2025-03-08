@@ -2,10 +2,8 @@
 namespace App\Core\Features\Organizations\Commands\CreateOrganization;
 
 use App\Core\Contracts\Infrastucture\IOrganizationRepository;
-use App\Domain\Models\Organization;
 use App\Infrastructure\Mediatr\CommandHandlerInterface;
 use App\Infrastructure\Mediatr\CommandInterface;
-use Illuminate\Support\Str;
 
 class CreateOrganizationHandler implements CommandHandlerInterface
 {
@@ -16,16 +14,16 @@ class CreateOrganizationHandler implements CommandHandlerInterface
         $this->OrganizationRepository = $OrganizationRepository;
     }
 
-    public function handle(CommandInterface $command)
+    public function handle(CommandInterface $command): mixed
     {
          // Validation des données AVANT d'exécuter la commande
-        $validatedData = (new CreateOrganizationValidator())->validate([
+        $validatedData = (new CreateOrganizationValidator())->validate(data: [
             'nom' => $command->nom,
             'contact' => $command->contact,
             'adresse_complete' => $command->adresse_complete,
         ]);
 
-        $Organizatione = $this->OrganizationRepository->add($validatedData);        
+        $Organizatione = $this->OrganizationRepository->add(entity: $validatedData);        
 
         return $Organizatione;
     }

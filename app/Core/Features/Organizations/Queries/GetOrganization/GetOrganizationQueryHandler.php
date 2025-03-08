@@ -5,7 +5,6 @@ use App\Core\Contracts\Infrastucture\IOrganizationRepository;
 use App\Infrastructure\Mediatr\QueryHandlerInterface;
 use App\Infrastructure\Mediatr\QueryInterface;
 use Illuminate\Support\Facades\Cache;
-use Exception;
 
 class GetOrganizationQueryHandler implements QueryHandlerInterface {
 
