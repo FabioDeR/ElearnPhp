@@ -11,7 +11,7 @@ use InvalidArgumentException;
 
 class CreateUserHandler implements CommandHandlerInterface
 {
-    public function handle(CommandInterface $command): mixed
+    public function handle(CommandInterface $command): object
     {
         // Vérifie que l'objet reçu est bien une instance de CreateUserCommand
         if (!$command instanceof CreateUserCommand) {

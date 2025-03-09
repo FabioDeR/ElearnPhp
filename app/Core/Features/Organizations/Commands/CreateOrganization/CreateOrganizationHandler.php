@@ -2,6 +2,7 @@
 namespace App\Core\Features\Organizations\Commands\CreateOrganization;
 
 use App\Core\Contracts\Infrastucture\IOrganizationRepository;
+use App\Domain\Models\Organization;
 use App\Infrastructure\Mediatr\CommandHandlerInterface;
 use App\Infrastructure\Mediatr\CommandInterface;
 
@@ -14,16 +15,24 @@ class CreateOrganizationHandler implements CommandHandlerInterface
         $this->OrganizationRepository = $OrganizationRepository;
     }
 
-    public function handle(CommandInterface $command): mixed
+    /**
+     * @param CreateOrganizationCommand $command
+     * @return object
+     */
+    public function handle(CommandInterface $command) : object
     {
-         // Validation des données AVANT d'exécuter la commande
+        if (!$command instanceof CreateOrganizationCommand) {
+            throw new \InvalidArgumentException("La commande doit être une instance de CreateOrganizationCommand");
+        }
+
         $validatedData = (new CreateOrganizationValidator())->validate(data: [
             'nom' => $command->nom ?? null,
             'contact' => $command->contact ?? null,
             'adresse_complete' => $command->adresse_complete ?? null,
         ]);
 
-        $Organizatione = $this->OrganizationRepository->add(entity: $validatedData);        
+        $organization = new Organization($validatedData);
+        $Organizatione = $this->OrganizationRepository->add(entity: $organization);
 
         return $Organizatione;
     }
