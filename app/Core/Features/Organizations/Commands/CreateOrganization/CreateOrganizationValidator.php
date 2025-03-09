@@ -18,6 +18,6 @@ class CreateOrganizationValidator implements ValidatorInterface
             throw new \InvalidArgumentException(json_encode($validator->errors()->all()));
         }
 
-        return $data;
+        return $data ;
     }
 }

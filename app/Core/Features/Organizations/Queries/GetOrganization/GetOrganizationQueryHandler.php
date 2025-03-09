@@ -19,7 +19,7 @@ class GetOrganizationQueryHandler implements QueryHandlerInterface {
     public function handle(QueryInterface $query) {
         
         return Cache::remember("organization_{$query->id}", 3600, function () use ($query) {
-            $organization = $this->OrganizationRepository->getById($query->id);
+            $organization = $this->OrganizationRepository->getById($query->id ?? null);
     
             if (!$organization) {
                 return null;

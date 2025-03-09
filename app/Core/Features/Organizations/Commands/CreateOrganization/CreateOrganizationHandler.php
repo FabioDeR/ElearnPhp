@@ -18,9 +18,9 @@ class CreateOrganizationHandler implements CommandHandlerInterface
     {
          // Validation des données AVANT d'exécuter la commande
         $validatedData = (new CreateOrganizationValidator())->validate(data: [
-            'nom' => $command->nom,
-            'contact' => $command->contact,
-            'adresse_complete' => $command->adresse_complete,
+            'nom' => $command->nom ?? null,
+            'contact' => $command->contact ?? null,
+            'adresse_complete' => $command->adresse_complete ?? null,
         ]);
 
         $Organizatione = $this->OrganizationRepository->add(entity: $validatedData);        

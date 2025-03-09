@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Users extends Authenticatable
+class User extends Authenticatable
 {
     use HasFactory, SoftDeletes, HasApiTokens;
 
-    protected $fillable = [
-        'name', 'email', 'password', 'balance', 'organization_id', 'preferences'
+    protected $fillable = ['name', 'email', 'password', 'organization_id', 'must_reset_password'];
+
+    protected $casts = [
+        'must_reset_password' => 'boolean',
     ];
 
     protected $hidden = ['password'];
