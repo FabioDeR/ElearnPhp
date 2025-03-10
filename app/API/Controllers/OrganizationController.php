@@ -11,17 +11,18 @@ use App\Infrastructure\Mediatr\MediatorInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use OpenApi\Annotations as OA;
 use Throwable;
-use L5Swagger\Annotations as SWG;
 
 /**
- * @SWG\Swagger(
- *     basePath="/api",
- *     @SWG\Info(
- *         version="1.0.0",
- *         title="Boite à Tartine API",
- *         description="Documentation de l'API"
- *     )
+ * @OA\Info(
+ *      title="Gamelle API",
+ *      version="1.0.0",
+ *      description="Documentation de l'API PtitGamelle")
+ * 
+ * @OA\Tag(
+ *     name="Organizations",
+ *     description="Operations sur les organisations"
  * )
  */
 
@@ -34,25 +35,39 @@ class OrganizationController extends Controller
         $this->mediator = $mediator;
     }
 
-    /**
-     * @SWG\Get(
-     *     path="/organization/{id}",
-     *     summary="Obtenir une organisation par ID",
+     /**
+     * @OA\Get(
+     *     path="/api/organization/{id}",
+     *     summary="Obtenir une organisation par son ID",
      *     tags={"Organizations"},
-     *     @SWG\Parameter(
+     *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
-     *         type="string",
-     *         description="ID de l'organisation"
+     *         description="L'identifiant unique de l'organisation",
+     *         @OA\Schema(type="string", format="uuid")
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=200,
-     *         description="Organisation trouvée"
+     *         description="Organisation trouvée",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="string", format="uuid"),
+     *                 @OA\Property(property="name", type="string", example="Tech Corp"),
+     *                 @OA\Property(property="contact", type="string", example="0123456789"),
+     *                 @OA\Property(property="full_address", type="string", example="123 PHP Street")
+     *             )
+     *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=404,
      *         description="Organisation non trouvée"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
      *     )
      * )
      */
@@ -74,27 +89,41 @@ class OrganizationController extends Controller
     }
 
  /**
-     * @SWG\Post(
-     *     path="/organization/create",
+     * @OA\Post(
+     *     path="/api/organization/create",
      *     summary="Créer une nouvelle organisation",
      *     tags={"Organizations"},
-     *     @SWG\Parameter(
-     *         name="body",
-     *         in="body",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @SWG\Schema(
-     *             @SWG\Property(property="nom", type="string", example="Mon Entreprise"),
-     *             @SWG\Property(property="contact", type="string", example="0123456789"),
-     *             @SWG\Property(property="adresse_complete", type="string", example="123 Rue de Laravel")
+     *         @OA\JsonContent(
+     *             required={"name", "contact", "full_address"},
+     *             @OA\Property(property="name", type="string", example="Tech Corp"),
+     *             @OA\Property(property="contact", type="string", example="0123456789"),
+     *             @OA\Property(property="full_address", type="string", example="123 PHP Street")
      *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=201,
-     *         description="Organisation créée avec succès"
+     *         description="Organisation créée avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Organisation créée avec succès"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="string", format="uuid"),
+     *                 @OA\Property(property="name", type="string", example="Tech Corp"),
+     *                 @OA\Property(property="contact", type="string", example="0123456789"),
+     *                 @OA\Property(property="full_address", type="string", example="123 PHP Street")
+     *             )
+     *         )
      *     ),
-     *     @SWG\Response(
+     *     @OA\Response(
      *         response=400,
-     *         description="Données invalides"
+     *         description="Requête invalide"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur interne"
      *     )
      * )
      */
