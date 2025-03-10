@@ -1,0 +1,169 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Gamelle API",
+        "description": "Documentation de l'API PtitGamelle",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/organization/{id}": {
+            "get": {
+                "tags": [
+                    "Organizations"
+                ],
+                "summary": "Obtenir une organisation par son ID",
+                "operationId": "9e97ff57736bf2448f26f579966225ad",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "L'identifiant unique de l'organisation",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Organisation trouvée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Tech Corp"
+                                                },
+                                                "contact": {
+                                                    "type": "string",
+                                                    "example": "0123456789"
+                                                },
+                                                "full_address": {
+                                                    "type": "string",
+                                                    "example": "123 PHP Street"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Organisation non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                }
+            }
+        },
+        "/api/organization/create": {
+            "post": {
+                "tags": [
+                    "Organizations"
+                ],
+                "summary": "Créer une nouvelle organisation",
+                "operationId": "5dc8b23a18a3038764e51f5520f0a7b2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "contact",
+                                    "full_address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tech Corp"
+                                    },
+                                    "contact": {
+                                        "type": "string",
+                                        "example": "0123456789"
+                                    },
+                                    "full_address": {
+                                        "type": "string",
+                                        "example": "123 PHP Street"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Organisation créée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Organisation créée avec succès"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Tech Corp"
+                                                },
+                                                "contact": {
+                                                    "type": "string",
+                                                    "example": "0123456789"
+                                                },
+                                                "full_address": {
+                                                    "type": "string",
+                                                    "example": "123 PHP Street"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requête invalide"
+                    },
+                    "500": {
+                        "description": "Erreur interne"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Organizations",
+            "description": "Operations sur les organisations"
+        }
+    ]
+}

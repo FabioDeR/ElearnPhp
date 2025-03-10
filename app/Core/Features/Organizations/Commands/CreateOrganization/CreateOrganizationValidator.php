@@ -9,9 +9,9 @@ class CreateOrganizationValidator implements ValidatorInterface
     public function validate(array $data): array
     {
         return Validator::make($data, [
-           'nom' => 'required|string|max:255',
+           'name' => 'required|string|max:255',
             'contact' => 'required|string|max:50',
-            'adresse_complete' => 'required|string',
+            'full_address' => 'required|string',
         ])->validate();
 
         if ($validator->fails()) {

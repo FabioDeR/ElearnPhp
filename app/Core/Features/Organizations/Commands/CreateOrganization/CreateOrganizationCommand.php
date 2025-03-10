@@ -7,16 +7,15 @@ use App\Infrastructure\Mediatr\CommandInterface;
 
 
 class CreateOrganizationCommand implements CommandInterface
-{
-    
-    public string $nom;
+{    
+    public string $name;
     public string $contact;
-    public string $adresse_complete; // Déclarez bien la propriété
+    public string $full_address; // Déclarez bien la propriété
 
     public function __construct(array $data)
     {
-        $this->nom            = $data['nom'] ?? '';
-        $this->contact        = $data['contact'] ?? '';
-        $this->adresse_complete = $data['adresse_complete'] ?? '';
+        $this->name       = $data['name'] ?? '';
+        $this->contact    = $data['contact'] ?? '';
+        $this->full_address = $data['full_address'] ?? '';
     }
 }

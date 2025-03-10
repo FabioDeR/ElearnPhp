@@ -5,14 +5,10 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+            'title' => 'Gamelle API Documentation',
             ],
-
             'routes' => [
-                /*
-                 * Route for accessing api documentation interface
-                 */
-                'api' => 'api/documentation',
+                'api' => 'api/documentation', // Endpoint pour accéder à Swagger
             ],
             'paths' => [
                 /*

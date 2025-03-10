@@ -25,15 +25,20 @@ class CreateOrganizationHandler implements CommandHandlerInterface
             throw new \InvalidArgumentException("La commande doit être une instance de CreateOrganizationCommand");
         }
 
-        $validatedData = (new CreateOrganizationValidator())->validate(data: [
-            'nom' => $command->nom ?? null,
+        if (!$command instanceof CreateOrganizationCommand) {
+            throw new \InvalidArgumentException("The command must be an instance of CreateOrganizationCommand");
+        }
+    
+        $validatedData = (new CreateOrganizationValidator())->validate([
+            'name' => $command->name ?? null,
             'contact' => $command->contact ?? null,
-            'adresse_complete' => $command->adresse_complete ?? null,
-        ]);
+            'full_address' => $command->full_address ?? null,
+        ]); 
+        
+    
+        // 🔥 Create the Organization and save it
+        $organization = new Organization($validatedData);    
 
-        $organization = new Organization($validatedData);
-        $Organizatione = $this->OrganizationRepository->add(entity: $organization);
-
-        return $Organizatione;
+        return $this->OrganizationRepository->add(entity: $organization);;
     }
 }
