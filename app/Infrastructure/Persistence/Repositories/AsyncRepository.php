@@ -31,11 +31,12 @@ class AsyncRepository implements IAsyncRepository
 
     public function update($entity)
     {
-        $entity->update();
+       return $entity->update();      
+
     }
 
     public function delete($entity)
     {
-        $entity->delete();
+        return $entity->delete();
     }
 }

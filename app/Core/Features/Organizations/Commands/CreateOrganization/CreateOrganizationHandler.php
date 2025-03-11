@@ -2,18 +2,19 @@
 namespace App\Core\Features\Organizations\Commands\CreateOrganization;
 
 use App\Core\Contracts\Infrastucture\IOrganizationRepository;
-use App\Domain\Models\Organization;
 use App\Infrastructure\Mediatr\CommandHandlerInterface;
 use App\Infrastructure\Mediatr\CommandInterface;
 
 class CreateOrganizationHandler implements CommandHandlerInterface
 {
     private IOrganizationRepository $OrganizationRepository;
+    private CreateOrganizationValidator $validator;
 
-    public function __construct(IOrganizationRepository $OrganizationRepository)
+    public function __construct(IOrganizationRepository $OrganizationRepository, CreateOrganizationValidator $validator)
     {
         $this->OrganizationRepository = $OrganizationRepository;
-    }
+        $this->validator = $validator;
+    }   
 
     /**
      * @param CreateOrganizationCommand $command
@@ -23,22 +24,13 @@ class CreateOrganizationHandler implements CommandHandlerInterface
     {
         if (!$command instanceof CreateOrganizationCommand) {
             throw new \InvalidArgumentException("La commande doit être une instance de CreateOrganizationCommand");
-        }
-
-        if (!$command instanceof CreateOrganizationCommand) {
-            throw new \InvalidArgumentException("The command must be an instance of CreateOrganizationCommand");
-        }
-    
-        $validatedData = (new CreateOrganizationValidator())->validate([
+        }     
+        $newOrganization =  $this->validator->hydrate([
             'name' => $command->name ?? null,
             'contact' => $command->contact ?? null,
             'full_address' => $command->full_address ?? null,
-        ]); 
-        
-    
-        // 🔥 Create the Organization and save it
-        $organization = new Organization($validatedData);    
+        ]);
 
-        return $this->OrganizationRepository->add(entity: $organization);;
+        return $this->OrganizationRepository->add($newOrganization);
     }
 }

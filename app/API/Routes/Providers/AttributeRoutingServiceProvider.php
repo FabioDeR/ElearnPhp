@@ -2,8 +2,10 @@
 
 namespace App\API\Routes\Providers;
 
+use App\API\Attributes\HttpDelete;
 use App\API\Attributes\HttpGet;
 use App\API\Attributes\HttpPost;
+use App\API\Attributes\HttpPut;
 use App\API\Middlewares\FromBodyBindingMiddleware;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -34,11 +36,12 @@ class AttributeRoutingServiceProvider extends ServiceProvider
                     foreach ($method->getAttributes() as $attribute) {
                         $instance = $attribute->newInstance();
                         $routeUri = rtrim($prefix, '/') . '/' . ltrim($instance->uri, '/');
-
                         // Gérer les différentes méthodes HTTP
                         match (true) {
                             $instance instanceof HttpGet => Route::get($routeUri, [$className, $method->getName()]),
                             $instance instanceof HttpPost => Route::post($routeUri, [$className, $method->getName()])->middleware(FromBodyBindingMiddleware::class),                         
+                            $instance instanceof HttpPut => Route::put($routeUri, [$className, $method->getName()])->middleware(FromBodyBindingMiddleware::class),                         
+                            $instance instanceof HttpDelete => Route::delete($routeUri, [$className, $method->getName()])                         
                         };
                     }
                 }
