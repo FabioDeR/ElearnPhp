@@ -23,12 +23,16 @@ class GetAllOrganizationHandler implements QueryHandlerInterface
     public function handle(QueryInterface $query): array
     {
        // Récupérer toutes les organisations et transformer en DTO
-       return $this->repository->listAll()
-       ->map(fn($org) => new GetOrganizationDto(
-           id: $org->id,
-           name: $org->name,
-           contact: $org->contact,
-           full_address: $org->full_address
-       ))->toArray(); 
+    //    return $this->repository->listAll()
+    //    ->map(fn($org) => new GetOrganizationDto(
+    //        id: $org->id,
+    //        name: $org->name,
+    //        contact: $org->contact,
+    //        full_address: $org->full_address
+    //    ))->toArray(); 
+
+        return [
+            "message" => "Hello World"
+        ];
     }
 }

@@ -2,7 +2,7 @@
 namespace App\API\Exceptions;
 use Illuminate\Http\JsonResponse;
 
-class ApiResponse
+class  ApiResponse
 {
     public static function success($data, string $message = "Success", int $status = 200): JsonResponse
     {

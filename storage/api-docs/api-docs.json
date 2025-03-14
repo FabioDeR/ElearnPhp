@@ -1,84 +1,19 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Gamelle API",
-        "description": "Documentation de l'API PtitGamelle",
+        "title": "Elearn API",
+        "description": "Documentation de l'API Elearn",
         "version": "1.0.0"
     },
     "paths": {
-        "/api/organization/{id}": {
-            "get": {
-                "tags": [
-                    "Organizations"
-                ],
-                "summary": "Obtenir une organisation par son ID",
-                "operationId": "9e97ff57736bf2448f26f579966225ad",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "L'identifiant unique de l'organisation",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Organisation trouvée",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "format": "uuid"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Tech Corp"
-                                                },
-                                                "contact": {
-                                                    "type": "string",
-                                                    "example": "0123456789"
-                                                },
-                                                "full_address": {
-                                                    "type": "string",
-                                                    "example": "123 PHP Street"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Organisation non trouvée"
-                    },
-                    "500": {
-                        "description": "Erreur interne"
-                    }
-                }
-            }
-        },
-        "/api/organization/create": {
+        "/api/auth/register": {
             "post": {
                 "tags": [
-                    "Organizations"
+                    "Authentication"
                 ],
-                "summary": "Créer une nouvelle organisation",
-                "operationId": "5dc8b23a18a3038764e51f5520f0a7b2",
+                "summary": "Créer un compte utilisateur",
+                "description": "Enregistre un nouvel utilisateur et retourne ses informations",
+                "operationId": "ce101ec31eee90493280175281834990",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -86,21 +21,29 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "contact",
-                                    "full_address"
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "Tech Corp"
+                                        "example": "John Doe"
                                     },
-                                    "contact": {
+                                    "email": {
                                         "type": "string",
-                                        "example": "0123456789"
+                                        "format": "email",
+                                        "example": "johndoe@example.com"
                                     },
-                                    "full_address": {
+                                    "password": {
                                         "type": "string",
-                                        "example": "123 PHP Street"
+                                        "format": "password",
+                                        "example": "Password123!"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "Password123!"
                                     }
                                 },
                                 "type": "object"
@@ -110,7 +53,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Organisation créée avec succès",
+                        "description": "Utilisateur créé avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -121,25 +64,23 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Organisation créée avec succès"
+                                            "example": "Utilisateur enregistré avec succès."
                                         },
                                         "data": {
                                             "properties": {
                                                 "id": {
                                                     "type": "string",
-                                                    "format": "uuid"
+                                                    "format": "uuid",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
                                                 },
                                                 "name": {
                                                     "type": "string",
-                                                    "example": "Tech Corp"
+                                                    "example": "John Doe"
                                                 },
-                                                "contact": {
+                                                "email": {
                                                     "type": "string",
-                                                    "example": "0123456789"
-                                                },
-                                                "full_address": {
-                                                    "type": "string",
-                                                    "example": "123 PHP Street"
+                                                    "format": "email",
+                                                    "example": "johndoe@example.com"
                                                 }
                                             },
                                             "type": "object"
@@ -150,11 +91,134 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Requête invalide"
+                    "422": {
+                        "description": "Erreur de validation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les données fournies sont invalides"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Connexion de l'utilisateur",
+                "description": "Authentifie un utilisateur et retourne un token d'accès",
+                "operationId": "f25bcdf6337de2fcd0c74761042635cc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "Password123!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Connexion réussie."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "format": "uuid",
+                                                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "format": "email",
+                                                            "example": "johndoe@example.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|dju94jdkl43920jf94jdf094jf"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
-                    "500": {
-                        "description": "Erreur interne"
+                    "401": {
+                        "description": "Échec de l'authentification",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Identifiants invalides."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -162,8 +226,8 @@
     },
     "tags": [
         {
-            "name": "Organizations",
-            "description": "Operations sur les organisations"
+            "name": "Authentication",
+            "description": "Operations liées à l'authentification des utilisateurs"
         }
     ]
 }

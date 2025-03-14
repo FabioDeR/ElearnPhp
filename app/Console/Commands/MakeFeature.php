@@ -158,13 +158,7 @@ class {$action}{$name}Handler implements CommandHandlerInterface
 
     public function handle({$action}{$name}Command \$command)
     {
-        if ('{$action}' === 'Create') {
-            return \$this->repository->add(['name' => \$command->name]);
-        } elseif ('{$action}' === 'Update') {
-            return \$this->repository->update(\$command->id, ['name' => \$command->name]);
-        } elseif ('{$action}' === 'Delete') {
-            return \$this->repository->delete(\$command->id);
-        }
+        
     }
 }";
     }
@@ -180,7 +174,7 @@ use App\Infrastructure\Mediatr\QueryInterface;
 class Get{$type}{$name}Query implements QueryInterface
 {
     public function __construct(
-        public ?string \$id = null
+        
     ) {}
 }";
     }
@@ -205,7 +199,7 @@ class Get{$type}{$name}Handler implements QueryHandlerInterface
 
     public function handle(Get{$type}{$name}Query \$query)
     {
-        return \$query->id ? \$this->repository->getById(\$query->id) : \$this->repository->getAll();
+        
     }
 }";
     }
